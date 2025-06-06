@@ -1,0 +1,19 @@
+# Python packaging
+*.egg-info/
+build/
+dist/
+*.egg
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Logs
+*.log
+
+
+# Databases
+*.db
+

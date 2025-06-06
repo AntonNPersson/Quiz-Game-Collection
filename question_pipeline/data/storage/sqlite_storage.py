@@ -3,7 +3,7 @@ from typing import Optional, Dict, Any, List
 from pathlib import Path
 import logging
 
-from ...utils.exceptions import (
+from question_pipeline.utils.exceptions import (
     DatabaseError,
     QueryError,
     IntegrityError,
@@ -15,7 +15,7 @@ class SQLiteStorage:
 
     def __init__(self, db_path: str):
         """Initializes the SQLite storage with the given database path."""
-        self.db_path = db_path
+        self.db_path = Path(db_path)
         self.connection = None
         self.migration_dir = Path(__file__).parent / "migrations"
         self.schema_dir = Path(__file__).parent / "schemas"
@@ -365,6 +365,52 @@ class SQLiteStorage:
                     'record_count': len(data_list),
                     'error_type': type(e).__name__
                 }
+            ) from e
+        
+    def get_table_columns(self, table: str) -> List[str]:
+        """Get the column names for a given table."""
+        try:
+            self._ensure_connection()
+            self._validate_table_name(table)
+            
+            query = f"PRAGMA table_info({table})"
+            cursor = self.execute_query(query)
+            columns = [row['name'] for row in cursor.fetchall()]
+            
+            self.logger.debug(f"Columns in {table}: {columns}")
+            
+            return columns
+            
+        except sqlite3.OperationalError as e:
+            self.logger.error(f"Error fetching columns for {table}", extra={
+                'table': table,
+                'sqlite_error': str(e)
+            })
+            raise QueryError(
+                f"Failed to fetch columns for table {table}",
+                context={'table': table, 'sqlite_error': str(e)}
+            ) from e
+        
+    def get_tables(self) -> List[str]:
+        """Get a list of all tables in the database."""
+        try:
+            self._ensure_connection()
+            
+            query = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';"
+            cursor = self.execute_query(query)
+            tables = [row['name'] for row in cursor.fetchall()]
+            
+            self.logger.debug(f"Tables in database: {tables}")
+            
+            return tables
+            
+        except sqlite3.OperationalError as e:
+            self.logger.error(f"Error fetching tables", extra={
+                'sqlite_error': str(e)
+            })
+            raise QueryError(
+                "Failed to fetch tables from database",
+                context={'sqlite_error': str(e)}
             ) from e
         
     def _validate_insert_data(self, table: str, data: Dict[str, Any]):

@@ -1,11 +1,11 @@
 import re
 from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List
 import logging
 import sqlite3
 
-from ...utils.exceptions import (
+from question_pipeline.utils.exceptions import (
     MigrationError,
     MigrationFileError,
     MigrationVersionError,

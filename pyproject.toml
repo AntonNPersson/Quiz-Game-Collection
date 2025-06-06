@@ -1,0 +1,42 @@
+    [build-system]
+    requires = ["setuptools>=45", "wheel"]
+    build-backend = "setuptools.build_meta"
+
+    [project]
+    name = "question-pipeline"
+    version = "0.1.0"
+    authors = [
+        {name = "Anton Nils Persson", email = "antonnilspersson@gmail.com"},
+    ]
+    description = "A quiz game question pipeline system"
+    readme = "README.md"
+    requires-python = ">=3.8"
+    classifiers = [
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: CC BY-NC 4.0 License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+    ]
+    dependencies = [
+        "setuptools==80.9.0"
+    ]
+
+    [project.urls]
+    "Homepage" = "https://github.com/AntonNpersson/Quiz-Game-Collection"
+    "Bug Reports" = "https://github.com/AntonNpersson/Quiz-Game-Collection/issues"
+    "Source" = "https://github.com/AntonNpersson/Quiz-Game-Collection"
+
+    [project.scripts]
+    question-pipeline = "question_pipeline.app:main"
+
+    [tool.setuptools.packages.find]
+    where = ["."]
+    include = ["question_pipeline*", "data*", "core*", "objects*", "utils*"]
+    exclude = ["tests*"]
