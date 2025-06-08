@@ -23,8 +23,8 @@ class QuestionRepository:
             List of question dictionaries
         """
         try:
-            # Start with base query
-            query = "SELECT * FROM questions WHERE 1=1"
+            # Start with base query - use the actual table name
+            query = "SELECT rowid, * FROM game_questions WHERE 1=1"
             params = []
             
             # Apply filters
@@ -87,8 +87,8 @@ class QuestionRepository:
             Number of matching questions
         """
         try:
-            # Start with count query
-            query = "SELECT COUNT(*) as count FROM questions WHERE 1=1"
+            # Start with count query - use the actual table name
+            query = "SELECT COUNT(*) as count FROM game_questions WHERE 1=1"
             params = []
             
             # Apply filters (excluding LIMIT, OFFSET, ORDER BY)
@@ -238,33 +238,9 @@ class QuestionRepository:
     
     def _dict_to_question(self, row_data: Dict[str, Any]) -> Question:
         """Convert a database row dictionary to a Question object"""
-        # Map database columns to Question constructor parameters
-        question_data = {}
-        
-        # Required fields
-        question_data['id'] = row_data.get('id')
-        question_data['text'] = row_data.get('text', row_data.get('question', ''))
-        
-        # Optional fields that match Question.ALLOWED_ATTRIBUTES
-        for attr in Question.ALLOWED_ATTRIBUTES:
-            if attr in row_data and row_data[attr] is not None:
-                question_data[attr] = row_data[attr]
-        
-        # Handle special cases
-        if 'options' in row_data and row_data['options']:
-            # If options is stored as JSON string, parse it
-            options = row_data['options']
-            if isinstance(options, str):
-                try:
-                    import json
-                    question_data['options'] = json.loads(options)
-                except json.JSONDecodeError:
-                    # If not JSON, assume it's a delimited string
-                    question_data['options'] = options.split('|')
-            else:
-                question_data['options'] = options
-        
-        return Question.from_dict(question_data)
+        # Use the new from_database_row method that handles the Swedish/English schema
+        row_id = row_data.get('rowid', 0)
+        return Question.from_database_row(row_data, row_id)
     
     def validate_filters(self, filters: List[IUniversalFilter]) -> List[str]:
         """

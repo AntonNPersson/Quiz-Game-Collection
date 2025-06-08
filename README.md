@@ -196,7 +196,7 @@ question_objects = repository.get_questions(filters)
 ### **Phase 1: Core Engine** (Current)
 - [x] Universal Filter System
 - [x] Question Repository  
-- [ ] Game Engine Core
+- [X] Game Engine Core
 - [ ] App Factory
 - [ ] Game Configurations
 

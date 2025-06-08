@@ -35,9 +35,17 @@ from .content_filters import (
 from .difficulty_filters import (
     DifficultyFilter,
     DifficultyRangeFilter,
-    ComplexityFilter,
+    SeriousnessLevelFilter,
+    SpiceLevelFilter,
+    NumericSpiceFilter,
     EasyQuestionsFilter,
-    HardQuestionsFilter
+    MediumQuestionsFilter,
+    HardQuestionsFilter,
+    MildSpiceFilter,
+    SpicyQuestionsFilter,
+    NonSeriousFilter,
+    ProgressiveDifficultyFilter,
+    ExactSeriousnessFilter
 )
 
 # Behavior filters
@@ -76,9 +84,17 @@ CONTENT_FILTERS = [
 DIFFICULTY_FILTERS = [
     DifficultyFilter,
     DifficultyRangeFilter,
-    ComplexityFilter,
+    SeriousnessLevelFilter,
+    SpiceLevelFilter,
+    NumericSpiceFilter,
     EasyQuestionsFilter,
-    HardQuestionsFilter
+    MediumQuestionsFilter,
+    HardQuestionsFilter,
+    MildSpiceFilter,
+    SpicyQuestionsFilter,
+    NonSeriousFilter,
+    ProgressiveDifficultyFilter,
+    ExactSeriousnessFilter
 ]
 
 BEHAVIOR_FILTERS = [
@@ -119,9 +135,17 @@ __all__ = [
     # Difficulty
     'DifficultyFilter',
     'DifficultyRangeFilter',
-    'ComplexityFilter',
+    'SeriousnessLevelFilter',
+    'SpiceLevelFilter',
+    'NumericSpiceFilter',
     'EasyQuestionsFilter',
+    'MediumQuestionsFilter',
     'HardQuestionsFilter',
+    'MildSpiceFilter',
+    'SpicyQuestionsFilter',
+    'NonSeriousFilter',
+    'ProgressiveDifficultyFilter',
+    'ExactSeriousnessFilter',
     
     # Behavior
     'RandomOrderFilter',

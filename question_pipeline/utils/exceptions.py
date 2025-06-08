@@ -112,3 +112,9 @@ class MigrationStateError(MigrationError):
 class MigrationExecutionError(MigrationError):
     """Exception raised for errors during migration execution."""
     pass
+
+
+# Game engine errors
+class GameEngineError(QuestionPipelineError):
+    """Exception raised for game engine-related errors."""
+    pass
