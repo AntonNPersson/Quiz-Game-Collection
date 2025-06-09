@@ -26,9 +26,6 @@ class GameState(Enum):
 
 class GameMode(Enum):
     """Supported game modes"""
-    TRIVIA = "trivia"
-    FLASHCARD = "flashcard"
-    SPEED_QUIZ = "speed_quiz"
     TRUTH_OR_DARE = "truth_or_dare"
     CUSTOM = "custom"
 

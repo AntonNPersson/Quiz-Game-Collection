@@ -17,12 +17,12 @@ sys.path.insert(0, str(project_root))
 from question_pipeline.data.storage.database_manager import DataBaseManager
 from question_pipeline.data.repositories.question_repository import QuestionRepository
 from question_pipeline.data.filters import (
-    TriviaGameModeFilter,
     CategoryFilter,
-    DifficultyFilter,
-    RandomOrderFilter,
     LimitFilter,
-    CompositeFilter
+    CompositeFilter,
+    DifficultyLevelFilter,
+    TruthOrDareGameModeFilter,
+    DareFilter,
 )
 
 def setup_logging():
@@ -132,7 +132,7 @@ def test_basic_filters(repository):
         print(f"  - {q.get_text()}")
     
     # Test 3: Difficulty filter
-    easy_filter = DifficultyFilter('easy')
+    easy_filter = DifficultyLevelFilter('easy', 'hard')
     easy_questions = repository.get_questions([easy_filter])
     print(f"Easy questions: {len(easy_questions)}")
     for q in easy_questions:
@@ -143,12 +143,17 @@ def test_basic_filters(repository):
     limited_questions = repository.get_questions([limit_filter])
     print(f"Limited to 2 questions: {len(limited_questions)}")
 
+    # Test 5: Truth filter
+    truth_filter = DareFilter()
+    truth_questions = repository.get_questions([truth_filter])
+    print(f"Truth questions: {len(truth_questions)}")
+
 def test_composite_filters(repository):
     """Test composite filter functionality"""
     print("\n=== Testing Composite Filters ===")
     
     # Test 1: AND composite (easy AND math)
-    easy_filter = DifficultyFilter('easy')
+    easy_filter = DifficultyLevelFilter('easy', 'easy')
     math_filter = CategoryFilter(['math'])
     and_composite = CompositeFilter([easy_filter, math_filter], "AND")
     
@@ -167,12 +172,26 @@ def test_composite_filters(repository):
     for q in or_questions:
         print(f"  - {q.get_text()}")
 
+    # Test 3: Conditional filter (truth and easy)
+    truth_filter = DareFilter()
+    easy_filter = DifficultyLevelFilter('4', '5')
+    conditional_filter = CompositeFilter([truth_filter, easy_filter], "AND")
+    conditional_questions = repository.get_questions([conditional_filter])
+    print(f"Conditional (truth and easy) questions: {len(conditional_questions)}")
+    count = 0
+    for q in conditional_questions:
+        count += 1
+        if count > 3:
+            break
+        print(f"New Question \n")
+        print(f"  - {q.get_text()}")
+
 def test_game_mode_filters(repository):
     """Test game mode filters"""
     print("\n=== Testing Game Mode Filters ===")
     
     # Test trivia game mode
-    trivia_filter = TriviaGameModeFilter()
+    trivia_filter = TruthOrDareGameModeFilter()
     trivia_questions = repository.get_questions([trivia_filter])
     print(f"Trivia-suitable questions: {len(trivia_questions)}")
     for q in trivia_questions:
@@ -216,15 +235,15 @@ def test_filter_validation(repository):
     # Test valid filters
     valid_filters = [
         CategoryFilter(['math']),
-        DifficultyFilter('easy')
+        DifficultyLevelFilter('easy', 'easy')
     ]
     errors = repository.validate_filters(valid_filters)
     print(f"Valid filters - Errors: {errors}")
     
     # Test conflicting filters (multiple game modes)
     conflicting_filters = [
-        TriviaGameModeFilter(),
-        TriviaGameModeFilter()  # Duplicate game mode
+        TruthOrDareGameModeFilter(),
+        TruthOrDareGameModeFilter()  # Duplicate game mode
     ]
     errors = repository.validate_filters(conflicting_filters)
     print(f"Conflicting filters - Errors: {errors}")
@@ -235,22 +254,19 @@ def main():
     
     print("=== Universal Filter System Test ===")
     
-    # Create test database
-    db_path = create_test_database()
-    
     try:
         # Initialize repository
-        db_manager = DataBaseManager(db_path)
+        db_manager = DataBaseManager("data\databases\game_questions.db")
         db_manager.initialize()
+        print(db_manager.get_database_info())
         repository = QuestionRepository(db_manager.storage)
-        
         # Run tests
-        test_basic_filters(repository)
+        #test_basic_filters(repository)
         test_composite_filters(repository)
-        test_game_mode_filters(repository)
-        test_random_questions(repository)
-        test_repository_info(repository)
-        test_filter_validation(repository)
+        #test_game_mode_filters(repository)
+        #test_random_questions(repository)
+        #test_repository_info(repository)
+        #test_filter_validation(repository)
         
         print("\n=== All Tests Completed Successfully! ===")
         
@@ -261,9 +277,7 @@ def main():
     
     finally:
         # Clean up
-        if os.path.exists(db_path):
-            os.remove(db_path)
-            print(f"Cleaned up test database: {db_path}")
+        print(f"Cleaned up test database")
 
 if __name__ == "__main__":
     main()

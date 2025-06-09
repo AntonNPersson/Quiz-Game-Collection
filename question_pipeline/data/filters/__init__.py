@@ -17,9 +17,6 @@ from .base_filter import IUniversalFilter, FilterCategory
 
 # Game mode filters
 from .game_mode_filters import (
-    TriviaGameModeFilter,
-    FlashcardGameModeFilter,
-    SpeedQuizGameModeFilter,
     TruthOrDareGameModeFilter
 )
 
@@ -28,24 +25,17 @@ from .content_filters import (
     CategoryFilter,
     TopicFilter,
     KeywordFilter,
-    ExcludeCategoryFilter
+    ExcludeCategoryFilter,
+    OfficialGroupFilter,
+    DareFilter,
+    TruthFilter
 )
 
 # Difficulty filters
 from .difficulty_filters import (
-    DifficultyFilter,
-    DifficultyRangeFilter,
+    DifficultyLevelFilter,
     SeriousnessLevelFilter,
     SpiceLevelFilter,
-    NumericSpiceFilter,
-    EasyQuestionsFilter,
-    MediumQuestionsFilter,
-    HardQuestionsFilter,
-    MildSpiceFilter,
-    SpicyQuestionsFilter,
-    NonSeriousFilter,
-    ProgressiveDifficultyFilter,
-    ExactSeriousnessFilter
 )
 
 # Behavior filters
@@ -68,9 +58,6 @@ from .composite_filter import (
 
 # Convenience collections
 GAME_MODE_FILTERS = [
-    TriviaGameModeFilter,
-    FlashcardGameModeFilter,
-    SpeedQuizGameModeFilter,
     TruthOrDareGameModeFilter
 ]
 
@@ -78,23 +65,14 @@ CONTENT_FILTERS = [
     CategoryFilter,
     TopicFilter,
     KeywordFilter,
-    ExcludeCategoryFilter
+    ExcludeCategoryFilter,
+    OfficialGroupFilter,
+    DareFilter,
+    TruthFilter
 ]
 
 DIFFICULTY_FILTERS = [
-    DifficultyFilter,
-    DifficultyRangeFilter,
-    SeriousnessLevelFilter,
-    SpiceLevelFilter,
-    NumericSpiceFilter,
-    EasyQuestionsFilter,
-    MediumQuestionsFilter,
-    HardQuestionsFilter,
-    MildSpiceFilter,
-    SpicyQuestionsFilter,
-    NonSeriousFilter,
-    ProgressiveDifficultyFilter,
-    ExactSeriousnessFilter
+    DifficultyLevelFilter,
 ]
 
 BEHAVIOR_FILTERS = [
@@ -121,9 +99,6 @@ __all__ = [
     'FilterCategory',
     
     # Game Mode
-    'TriviaGameModeFilter',
-    'FlashcardGameModeFilter', 
-    'SpeedQuizGameModeFilter',
     'TruthOrDareGameModeFilter',
     
     # Content
@@ -131,21 +106,14 @@ __all__ = [
     'TopicFilter',
     'KeywordFilter',
     'ExcludeCategoryFilter',
+    'OfficialGroupFilter',
+    'DareFilter',
+    'TruthFilter',
     
     # Difficulty
-    'DifficultyFilter',
-    'DifficultyRangeFilter',
+    'DifficultyLevelFilter',
     'SeriousnessLevelFilter',
     'SpiceLevelFilter',
-    'NumericSpiceFilter',
-    'EasyQuestionsFilter',
-    'MediumQuestionsFilter',
-    'HardQuestionsFilter',
-    'MildSpiceFilter',
-    'SpicyQuestionsFilter',
-    'NonSeriousFilter',
-    'ProgressiveDifficultyFilter',
-    'ExactSeriousnessFilter',
     
     # Behavior
     'RandomOrderFilter',

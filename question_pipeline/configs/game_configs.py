@@ -19,68 +19,6 @@ class GameModeConfig:
     supports_skip: bool = False
     default_settings: Dict[str, Any] = field(default_factory=dict)
 
-
-@dataclass
-class TriviaConfig(GameModeConfig):
-    """Configuration for Trivia game mode"""
-    name: str = "Trivia Quiz"
-    description: str = "Classic question and answer format with multiple choice options"
-    default_question_count: int = 10
-    supports_time_limit: bool = True
-    supports_scoring: bool = True
-    supports_skip: bool = False
-    default_settings: Dict[str, Any] = field(default_factory=lambda: {
-        'show_correct_answer': True,
-        'shuffle_options': True,
-        'points_per_correct': 1,
-        'penalty_for_wrong': 0,
-        'allow_partial_credit': False,
-        'time_per_question': 30,  # seconds
-        'show_explanation': True
-    })
-
-
-@dataclass
-class FlashcardConfig(GameModeConfig):
-    """Configuration for Flashcard game mode"""
-    name: str = "Flashcard Study"
-    description: str = "Study mode with question/answer pairs for memorization"
-    default_question_count: int = 20
-    supports_time_limit: bool = False
-    supports_scoring: bool = False
-    supports_skip: bool = True
-    default_settings: Dict[str, Any] = field(default_factory=lambda: {
-        'show_answer_immediately': False,
-        'allow_self_rating': True,
-        'repeat_incorrect': True,
-        'shuffle_cards': True,
-        'show_progress': True,
-        'rating_scale': ['Again', 'Hard', 'Good', 'Easy'],  # Spaced repetition style
-        'auto_advance': False
-    })
-
-
-@dataclass
-class SpeedQuizConfig(GameModeConfig):
-    """Configuration for Speed Quiz game mode"""
-    name: str = "Speed Quiz"
-    description: str = "Fast-paced quiz with time pressure and bonus points"
-    default_question_count: int = 15
-    supports_time_limit: bool = True
-    supports_scoring: bool = True
-    supports_skip: bool = False
-    default_settings: Dict[str, Any] = field(default_factory=lambda: {
-        'time_per_question': 10,  # seconds
-        'speed_bonus_multiplier': 2.0,
-        'streak_bonus': True,
-        'streak_multiplier': 1.5,
-        'penalty_for_wrong': -1,
-        'show_timer': True,
-        'auto_advance': True,
-        'difficulty_progression': True  # Gets harder as you progress
-    })
-
-
 @dataclass
 class TruthOrDareConfig(GameModeConfig):
     """Configuration for Truth or Dare game mode"""
@@ -103,9 +41,6 @@ class TruthOrDareConfig(GameModeConfig):
 
 # Configuration registry
 GAME_MODE_CONFIGS = {
-    GameMode.TRIVIA: TriviaConfig(),
-    GameMode.FLASHCARD: FlashcardConfig(),
-    GameMode.SPEED_QUIZ: SpeedQuizConfig(),
     GameMode.TRUTH_OR_DARE: TruthOrDareConfig()
 }
 
@@ -204,12 +139,6 @@ def validate_game_config(config: GameConfig) -> List[str]:
         elif config.question_count > 100:
             errors.append("Question count should not exceed 100 for performance reasons")
         
-        # Mode-specific validations
-        if config.game_mode == GameMode.SPEED_QUIZ:
-            time_per_question = config.custom_settings.get('time_per_question', 10)
-            if time_per_question < 5:
-                errors.append("Speed quiz requires at least 5 seconds per question")
-        
         elif config.game_mode == GameMode.TRUTH_OR_DARE:
             truth_ratio = config.custom_settings.get('truth_ratio', 0.6)
             if not 0 <= truth_ratio <= 1:
@@ -232,24 +161,6 @@ def get_recommended_filters(game_mode: GameMode) -> List[str]:
         List of recommended filter descriptions
     """
     recommendations = {
-        GameMode.TRIVIA: [
-            "Use CategoryFilter to focus on specific topics",
-            "Use DifficultyFilter to match player skill level", 
-            "Use RandomOrderFilter for variety",
-            "Consider LimitFilter to control session length"
-        ],
-        GameMode.FLASHCARD: [
-            "Use CategoryFilter to study specific subjects",
-            "Use DifficultyRangeFilter for progressive learning",
-            "Avoid RandomOrderFilter for structured learning",
-            "Use NoRepeatFilter to avoid duplicate cards"
-        ],
-        GameMode.SPEED_QUIZ: [
-            "Use EasyQuestionsFilter for faster gameplay",
-            "Use RandomOrderFilter for unpredictability",
-            "Use LimitFilter for timed sessions",
-            "Consider ProgressiveFilter for increasing difficulty"
-        ],
         GameMode.TRUTH_OR_DARE: [
             "Use CategoryFilter to match party theme",
             "Use appropriate difficulty filters for group comfort level",

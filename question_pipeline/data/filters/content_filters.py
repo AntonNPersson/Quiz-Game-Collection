@@ -219,3 +219,35 @@ class OfficialGroupFilter(IUniversalFilter):
     
     def get_description(self) -> str:
         return f"Official group filter: {', '.join(self.groups)}"
+    
+class DareFilter(IUniversalFilter):
+    """Filter questions by only dare questions"""
+
+    def __init__(self):
+        pass
+
+    def apply_to_query(self, query: str, params: list) -> Tuple[str, List]:
+        query += " AND Kort_1 = 'Konsekvens'"
+        return query, params
+    
+    def get_filter_type(self) -> str:
+        return FilterCategory.CONTENT
+    
+    def get_description(self) -> str:
+        return "Dare questions only (Kort_1 = 'Konsekvens')"
+    
+class TruthFilter(IUniversalFilter):
+    """Filter questions by only truth questions"""
+
+    def __init__(self):
+        pass
+
+    def apply_to_query(self, query: str, params: list) -> Tuple[str, List]:
+        query += " AND Kort_1 = 'Sanning'"
+        return query, params
+    
+    def get_filter_type(self) -> str:
+        return FilterCategory.CONTENT
+    
+    def get_description(self) -> str:
+        return "Truth questions only (Kort_1 = 'Sanning')"
