@@ -100,7 +100,7 @@ question_pipeline/data/repositories/
 └── question_repository.py  # Connects filters to storage layer
 ```
 
-#### **3. Game Engine Core** 🔄 NEXT
+#### **3. Game Engine Core** ✅ IMPLEMENTED
 ```
 question_pipeline/core/
 ├── engine.py              # UniversalQuizEngine
@@ -108,7 +108,7 @@ question_pipeline/core/
 └── scoring.py             # Scoring algorithms
 ```
 
-#### **4. Game Configurations** 🔄 NEXT
+#### **4. Game Configurations** ✅ IMPLEMENTED
 ```
 question_pipeline/configs/
 ├── base_config.py         # GameModeConfig class
@@ -117,7 +117,7 @@ question_pipeline/configs/
 └── speed_quiz_config.py   # Speed Quiz configuration
 ```
 
-#### **5. App Factory** 🔄 NEXT
+#### **5. App Factory** ✅ IMPLEMENTED
 ```
 question_pipeline/factory/
 └── app_factory.py         # QuizAppFactory for creating apps
@@ -195,19 +195,34 @@ question_objects = repository.get_questions(filters)
 
 ## 🎮 **TRUTH OR DARE APP - READY TO PLAY!**
 
-The first complete game application is now available:
+The first complete game application is now available with both CLI and modern GUI interfaces:
 
 ### **Features Implemented:**
 - 🎭 **Complete Truth or Dare Game**: 4,020 questions (1,745 Truth + 2,275 Dare)
 - 👥 **Player Management**: Round-robin player rotation system
-- 🎯 **Smart Filtering**: Spice level, difficulty, and question type filtering
+- 🎯 **Smart Filtering**: Spice level, difficulty, and language filtering
+- 🌍 **Language Support**: English, Swedish, and bilingual questions with smart fallback
 - 🎮 **Session Management**: Full game lifecycle (create, start, play, end)
 - 📊 **Statistics**: Real-time game progress and database analytics
 - 🖥️ **CLI Interface**: Interactive terminal-based gameplay
+- 🖼️ **Modern GUI**: Responsive desktop application with themes
 - 🏗️ **Programmatic API**: Full API for integration into other apps
+
+### **GUI Application Features:**
+- 🎨 **Modern UI Design**: Clean, responsive interface with multiple themes
+- 📱 **Responsive Layout**: Grid-based design that scales with window size
+- 🌍 **Language Selection**: Choose English, Swedish, or both languages
+- ℹ️ **Info Button**: Optional answer reveals without spoilers
+- 🎭 **Visual Indicators**: Clear truth/dare distinction with color coding
+- ⚙️ **Customizable Settings**: Adjustable question count, truth ratio, spice level
+- 📈 **Progress Tracking**: Visual progress bar and game statistics
+- 🎨 **Theme Support**: Classic, Dark Mode, and Party themes
 
 ### **How to Play:**
 ```bash
+# Launch the modern GUI application
+python scripts/run_truth_or_dare_gui.py
+
 # Launch the interactive CLI
 python scripts/run_truth_or_dare_cli.py
 
@@ -219,13 +234,14 @@ python tests/test_truth_or_dare_app.py
 ```python
 from games.truth_or_dare_app import TruthOrDareApp
 
-# Create and configure game
+# Create and configure game with language filtering
 app = TruthOrDareApp("data/databases/game_questions.db")
 game_id = app.create_game(
     player_names=["Alice", "Bob", "Charlie"],
     question_count=15,
     truth_ratio=0.6,
-    spice_level="mild"
+    spice_level="mild",
+    language="en"  # "en", "se", or "both"
 )
 
 # Play the game

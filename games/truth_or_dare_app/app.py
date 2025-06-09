@@ -11,9 +11,10 @@ from pathlib import Path
 
 from question_pipeline.factory.app_factory import AppFactory, GameApp
 from question_pipeline.core.engine import GameMode
-from question_pipeline.data.filters.content_filters import CategoryFilter
+from question_pipeline.data.filters.content_filters import CategoryFilter, LanguageFilter
 from question_pipeline.data.filters.difficulty_filters import SpiceLevelFilter
 from question_pipeline.data.filters.behavior_filters import RandomOrderFilter
+from question_pipeline.data.filters.composite_filter import CompositeFilter
 
 
 class TruthOrDareApp:
@@ -59,6 +60,7 @@ class TruthOrDareApp:
         question_count: Optional[int] = None,
         truth_ratio: float = 0.6,
         spice_level: Optional[str] = None,
+        language: Optional[str] = None,
         game_id: Optional[str] = None
     ) -> str:
         """
@@ -69,6 +71,7 @@ class TruthOrDareApp:
             question_count: Number of questions (uses default if None)
             truth_ratio: Ratio of truth to dare questions (0.0 to 1.0)
             spice_level: Spice level filter (uses default if None)
+            language: Language filter ("en", "se", "both")
             game_id: Optional custom game ID (generates one if None)
             
         Returns:
@@ -86,6 +89,24 @@ class TruthOrDareApp:
             question_count = self.default_question_count
         if spice_level is None:
             spice_level = self.default_spice_level
+        if language is None:
+            language = "en"  # Default to English
+        
+        # Create filters for this game
+        filters = []
+        
+        # Add spice level filter
+        if spice_level:
+            filters.append(SpiceLevelFilter(spice_level))
+        
+        # Add language filter
+        if language:
+            filters.append(LanguageFilter(language))
+        
+        # Create composite filter if we have any filters
+        composite_filter = None
+        if filters:
+            composite_filter = CompositeFilter(filters)
         
         # Create custom settings for this game
         custom_settings = {
@@ -93,7 +114,8 @@ class TruthOrDareApp:
             'truth_ratio': truth_ratio,
             'round_robin': True,
             'allow_player_choice': False,  # Game decides truth or dare
-            'age_appropriate': True
+            'age_appropriate': True,
+            'filters': [composite_filter] if composite_filter else []
         }
         
         # Create session
@@ -111,6 +133,7 @@ class TruthOrDareApp:
             'question_count': question_count,
             'truth_ratio': truth_ratio,
             'spice_level': spice_level,
+            'language': language,
             'started': False
         }
         

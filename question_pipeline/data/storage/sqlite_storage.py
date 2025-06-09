@@ -2,6 +2,7 @@ import sqlite3
 from typing import Optional, Dict, Any, List
 from pathlib import Path
 import logging
+import threading
 
 from question_pipeline.utils.exceptions import (
     DatabaseError,
@@ -16,27 +17,33 @@ class SQLiteStorage:
     def __init__(self, db_path: str):
         """Initializes the SQLite storage with the given database path."""
         self.db_path = Path(db_path)
-        self.connection = None
         self.migration_dir = Path(__file__).parent / "migrations"
         self.schema_dir = Path(__file__).parent / "schemas"
         self.logger = logging.getLogger(__name__)
+        self._thread_local = threading.local()
 
     def connect(self):
-        """Connect to the SQLite database."""
+        """Connect to the SQLite database (thread-safe)."""
         try:
             # Ensure directory exists
             self.db_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # Connect to database
-            self.connection = sqlite3.connect(str(self.db_path))
-            self.connection.row_factory = sqlite3.Row
+            # Create thread-local connection
+            connection = sqlite3.connect(
+                str(self.db_path),
+                check_same_thread=False  # Allow cross-thread usage
+            )
+            connection.row_factory = sqlite3.Row
             
             # Enable foreign key constraints
-            self.connection.execute("PRAGMA foreign_keys = ON")
+            connection.execute("PRAGMA foreign_keys = ON")
+            
+            # Store in thread-local storage
+            self._thread_local.connection = connection
             
             self.logger.info(f"Connected to SQLite database at {self.db_path}")
             
-            return self.connection
+            return connection
             
         except sqlite3.OperationalError as e:
             self.logger.error(f"Failed to connect to database: {e}")
@@ -53,16 +60,22 @@ class SQLiteStorage:
             ) from e
     
     def close(self):
-        """Close the SQLite database connection."""
+        """Close the SQLite database connection (thread-safe)."""
         try:
-            if self.connection:
-                self.connection.close()
-                self.connection = None
+            connection = getattr(self._thread_local, 'connection', None)
+            if connection:
+                connection.close()
+                self._thread_local.connection = None
                 self.logger.info(f"Closed SQLite database connection")
                 
         except Exception as e:
             self.logger.warning(f"Error closing database connection: {e}")
             # Don't raise here - closing should be fail-safe
+
+    @property
+    def connection(self):
+        """Get the thread-local database connection."""
+        return getattr(self._thread_local, 'connection', None)
 
     def execute_query(self, query: str, params: tuple = None) -> sqlite3.Cursor:
         """Execute a query on the SQLite database."""

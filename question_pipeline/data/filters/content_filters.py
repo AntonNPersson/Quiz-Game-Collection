@@ -129,18 +129,27 @@ class ExcludeCategoryFilter(IUniversalFilter):
         return f"Exclude categories: {', '.join(self.excluded_categories)}"
 
 class LanguageFilter(IUniversalFilter):
-    """Filter questions by language availability"""
+    """Filter questions by language availability based on actual database values
+    
+    Database Language column values:
+    - "both" for questions available in both languages
+    - "SE Only" for Swedish-only questions  
+    - "EN Only" for English-only questions
+    """
     
     def __init__(self, language: str):
         self.language = language.lower()
     
     def apply_to_query(self, query: str, params: list) -> Tuple[str, List]:
         if self.language == 'en':
-            query += " AND (LOWER(Language) LIKE '%en%' OR LOWER(Language) LIKE '%both%')"
+            # English: include "both" and "EN Only"
+            query += " AND (Language = 'both' OR Language = 'EN_Only')"
         elif self.language == 'se':
-            query += " AND (LOWER(Language) LIKE '%se%' OR LOWER(Language) LIKE '%both%')"
+            # Swedish: include "both" and "SE Only"
+            query += " AND (Language = 'both' OR Language = 'SE_Only')"
         elif self.language == 'both':
-            query += " AND LOWER(Language) LIKE '%both%'"
+            # Both: only include questions available in both languages
+            query += " AND Language = 'both'"
         
         return query, params
     

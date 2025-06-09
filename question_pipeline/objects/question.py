@@ -88,17 +88,41 @@ class Question:
     def get_text(self, language: str = None) -> str:
         """Returns the text of the question in the specified language."""
         if language == 'en' and hasattr(self, 'text_en') and self.text_en:
-            return self.text_en
+            # Check if English text is a placeholder
+            if self.text_en.strip() == "-- one language --":
+                # Use Swedish text if available
+                if hasattr(self, 'text_se') and self.text_se and self.text_se.strip() != "-- one language --":
+                    return self.text_se
+            else:
+                return self.text_en
         elif language == 'se' and hasattr(self, 'text_se') and self.text_se:
-            return self.text_se
+            # Check if Swedish text is a placeholder
+            if self.text_se.strip() == "-- one language --":
+                # Use English text if available
+                if hasattr(self, 'text_en') and self.text_en and self.text_en.strip() != "-- one language --":
+                    return self.text_en
+            else:
+                return self.text_se
         return self.text
     
     def get_info(self, language: str = None) -> Optional[str]:
         """Returns the answer/info for the question in the specified language."""
         if language == 'en' and hasattr(self, 'info_en') and self.info_en:
-            return self.info_en
+            # Check if English info is a placeholder
+            if self.info_en.strip() == "-- one language --":
+                # Use Swedish info if available
+                if hasattr(self, 'info_se') and self.info_se and self.info_se.strip() != "-- one language --":
+                    return self.info_se
+            else:
+                return self.info_en
         elif language == 'se' and hasattr(self, 'info_se') and self.info_se:
-            return self.info_se
+            # Check if Swedish info is a placeholder
+            if self.info_se.strip() == "-- one language --":
+                # Use English info if available
+                if hasattr(self, 'info_en') and self.info_en and self.info_en.strip() != "-- one language --":
+                    return self.info_en
+            else:
+                return self.info_se
         elif hasattr(self, 'info') and self.info:
             return self.info
         return None
