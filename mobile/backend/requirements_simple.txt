@@ -1,0 +1,14 @@
+# Simplified FastAPI Backend Requirements (No Rust/C dependencies)
+
+# Core API framework - minimal versions
+fastapi==0.100.0
+uvicorn==0.23.0
+
+# Data validation
+pydantic==2.0.0
+
+# CORS support
+python-multipart==0.0.5
+
+# Optional: For production
+gunicorn==20.1.0

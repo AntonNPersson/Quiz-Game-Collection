@@ -1,0 +1,18 @@
+# FastAPI Backend Requirements for Quiz Game Collection Mobile API
+
+# Core API framework
+fastapi==0.104.1
+uvicorn==0.24.0
+
+# Data validation and serialization
+pydantic==2.5.0
+
+# CORS middleware for mobile app access
+python-multipart==0.0.6
+
+# Optional: For production deployment
+gunicorn==21.2.0
+
+# Development and testing
+pytest==7.4.3
+httpx==0.25.2
