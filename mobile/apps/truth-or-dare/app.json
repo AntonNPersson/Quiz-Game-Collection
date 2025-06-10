@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Truth or Dare",
+    "slug": "truth-or-dare-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#F8FAFC"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.quizgamecollection.truthordare"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F8FAFC"
+      },
+      "package": "com.quizgamecollection.truthordare"
+    },
+    "web": {},
+    "sdkVersion": "53.0.0",
+    "platforms": ["ios", "android"],
+    "scheme": "truth-or-dare"
+  }
+}

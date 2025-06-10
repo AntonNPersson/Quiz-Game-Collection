@@ -458,9 +458,9 @@ def run_server(port=8000):
     server_address = ('', port)
     httpd = HTTPServer(server_address, QuizAPIHandler)
     
-    print(f"🚀 Quiz Game Collection API Server")
-    print(f"🌐 Server running on http://localhost:{port}")
-    print(f"📖 API endpoints available:")
+    print(f"Quiz Game Collection API Server")
+    print(f"Server running on http://localhost:{port}")
+    print(f"API endpoints available:")
     print(f"   GET  /                    - Health check")
     print(f"   GET  /games/types         - Available game types")
     print(f"   POST /games               - Create new game")
@@ -472,8 +472,8 @@ def run_server(port=8000):
     print(f"   GET  /stats               - Database statistics")
     print(f"   GET  /themes              - Available themes")
     print(f"")
-    print(f"🔧 Core modules available: {CORE_AVAILABLE}")
-    print(f"📱 Ready for mobile app connection!")
+    print(f"Core modules available: {CORE_AVAILABLE}")
+    print(f"Ready for mobile app connection!")
     print(f"")
     print(f"Press Ctrl+C to stop the server")
     
