@@ -224,9 +224,31 @@ python scripts/run_truth_or_dare_gui.py
 # Launch the interactive CLI
 python scripts/run_truth_or_dare_cli.py
 
+# Start mobile development servers (API + Mobile App)
+python scripts/start_simple_mobile_test.py
+
 # Run comprehensive tests
 python tests/test_truth_or_dare_app.py
 ```
+
+### **📱 Mobile Development:**
+The project includes a complete mobile app development environment:
+
+- **🔧 Backend API Server**: RESTful API on `http://localhost:8000`
+- **📱 React Native Mobile App**: Expo-based mobile application
+- **🚀 One-Command Startup**: Automated server management
+- **📖 Complete Documentation**: Step-by-step setup guides
+
+**Quick Start:**
+```bash
+# Start both API and mobile servers
+python scripts/start_simple_mobile_test.py
+```
+
+**Documentation:**
+- **📋 [Server Setup Guide](docs/HOW_TO_START_SERVERS.md)** - Complete instructions for starting API and mobile servers
+- **⚡ [Quick Reference](docs/SERVER_QUICK_REFERENCE.md)** - Essential commands and troubleshooting
+- **📱 [Mobile Quick Start](docs/mobile/QUICK_START_MOBILE.md)** - Mobile-specific setup and testing
 
 ### **Programmatic Usage:**
 ```python
