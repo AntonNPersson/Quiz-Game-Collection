@@ -256,10 +256,11 @@ result = app.complete_question(game_id, completed=True)
 - [x] Game Configurations
 
 ### **Phase 2: First Apps** ✅ COMPLETE
-- [x] **Truth or Dare app** - Fully functional with CLI
+- [x] **Truth or Dare desktop app** - Fully functional with CLI and GUI
+- [ ] **Truth or Dare mobile app** - Fully functional with React Native frontend
 
 ### **Phase 3: Platform Expansion**
-- [/] Web API layer
+- [ ] Web API layer
 - [X] React frontend
 - [X] Mobile app adapters
 - [X] Desktop packaging
